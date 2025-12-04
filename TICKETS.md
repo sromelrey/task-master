@@ -19,12 +19,12 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Create a new Next.js project with the App Router enabled
-- [ ] Configure TypeScript in the project
-- [ ] Install and configure Tailwind CSS
-- [ ] Initialize shadcn/ui and generate a basic component (e.g., Button)
-- [ ] Verify a sample page renders correctly with Tailwind + shadcn styles
-- [ ] Commit initial setup to version control
+- [x] Create a new Next.js project with the App Router enabled
+- [x] Configure TypeScript in the project
+- [x] Install and configure Tailwind CSS
+- [x] Initialize shadcn/ui and generate a basic component (e.g., Button)
+- [x] Verify a sample page renders correctly with Tailwind + shadcn styles
+- [x] Commit initial setup to version control
 
 </details>
 
