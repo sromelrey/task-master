@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TaskMaster 📝
+
+TaskMaster is a lightweight task board built with **Next.js (App Router)**, **shadcn/ui**, **React drag and drop**, **Tailwind CSS**, and **Redux Toolkit** for state management.
+
+The main idea:  
+👉 Your tasks are **temporary** and live only for **12 hours** in the browser’s `localStorage`.  
+After 12 hours, your data is automatically deleted, giving you a clean slate for short-term, focused work sessions.
+
+---
+
+## Features
+
+- ✅ **Kanban-style board** (using React drag-and-drop)
+- ✅ **Temporary task storage** with a **12-hour TTL** (time to live)
+- ✅ **Local-only data** (no backend, everything stays in your browser)
+- ✅ **Centralized state management** using **Redux Toolkit**
+- ✅ **Modern UI** with shadcn/ui + Tailwind CSS
+- ✅ Built on **Next.js App Router**
+
+---
+
+## How the 12-Hour Storage Works
+
+- When you create or update tasks, TaskMaster saves:
+  - The **task data** (via Redux state)
+  - A **timestamp** indicating when it was last updated
+- On **every app load**:
+  - The app checks `localStorage` for saved data and the timestamp
+  - If the saved timestamp is **older than 12 hours**, all stored tasks are **cleared**
+  - If it’s still within 12 hours, the tasks are **restored** into Redux state and rendered on the board
+
+This makes TaskMaster ideal for:
+
+- Daily planning
+- One-off work sessions
+- Temporary to-do lists you don’t want to keep forever
+
+---
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Language:** TypeScript
+- **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) + [React Redux](https://react-redux.js.org/)
+- **UI Library:** [shadcn/ui](https://ui.shadcn.com/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Drag and Drop:** [`@dnd-kit`](https://dndkit.com/) (React drag-and-drop utilities)
+- **Storage:** Browser `localStorage` with a 12-hour TTL
+
+---
+
+## Libraries & Dependencies
+
+Core libraries we are going to use in this app:
+
+- **React & Next.js**
+  - `next`
+  - `react`
+  - `react-dom`
+  - `typescript` (for type safety)
+- **State Management**
+  - `@reduxjs/toolkit`
+  - `react-redux`
+- **UI & Styling**
+  - `tailwindcss`
+  - `postcss`
+  - `autoprefixer`
+  - `@radix-ui/react-*` (via shadcn/ui, for accessible primitives)
+  - `shadcn/ui` components (installed via the shadcn CLI)
+- **Drag and Drop**
+  - `@dnd-kit/core`
+  - `@dnd-kit/sortable`
+  - `@dnd-kit/utilities`
+- **Utilities (likely)**
+  - `class-variance-authority` (used by shadcn/ui)
+  - `tailwind-merge` (for merging Tailwind classes)
+  - `zod` or similar (optional, for schema validation if needed later)
+
+> Note: Exact versions will be set in `package.json` when the project is initialized.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- **Node.js** (LTS recommended)
+- **pnpm** / **yarn** / **npm**
+
+### Installation
 
 ```bash
-npm run dev
+# Clone the repository
+git clone <your-repo-url>
+cd taskmaster
+
+# Install dependencies
+pnpm install
 # or
-yarn dev
+yarn install
 # or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Folder Structure
+```bash
+src/
+├── app/
+│   ├── providers.tsx        # Redux Provider, UI/theme providers
+│   └── page.tsx             # Main TaskMaster page (App Router)
+├── components/
+│   ├── TaskBoard.tsx        # Main board with drag-and-drop
+│   ├── TaskColumn.tsx       # Columns (e.g., Todo, In Progress, Done)
+│   ├── TaskCard.tsx         # Individual task cards
+│   └── TaskForm.tsx         # Create / edit task form
+├── store/
+│   ├── index.ts             # Redux store configuration (Redux Toolkit)
+│   └── taskSlice.ts         # Task-related reducers, actions, and selectors
+└── lib/
+    └── storage.ts           # Helpers for localStorage + 12-hour TTL
+```
