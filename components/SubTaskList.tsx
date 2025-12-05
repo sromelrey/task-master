@@ -12,19 +12,33 @@ interface SubTask {
   completed: boolean;
 }
 
-const SubTaskList = memo(function SubTaskList() {
-  console.log("Subtasklist rendered");
-  const [subtasks, setSubtasks] = useState<SubTask[]>([]);
+interface SubTaskListProps {
+  value?: SubTask[],
+  onChange?: (subtasks: SubTask[]) => void
+}
+
+const SubTaskList = memo(function SubTaskList({ value = [], onChange }: SubTaskListProps) {
+  const subtasks = value;
 
   const addSubtask = () => {
-    setSubtasks((prev) => [
-      ...prev,
+    const newSubtasks = [
+      ...subtasks,
       { id: crypto.randomUUID(), text: "", completed: false },
-    ]);
+    ];
+    onChange?.(newSubtasks);
   };
 
-  const removeSubtask = (id: string) => {};
-  const updateSubtask = (id: string, updatedSubtask: Partial<SubTask>) => {};
+  const removeSubtask = (id: string) => {
+    const newSubtasks = subtasks.filter((subtask) => subtask.id !== id);
+    onChange?.(newSubtasks);
+  };
+
+  const updateSubtask = (id: string, updatedSubtask: Partial<SubTask>) => {
+    const newSubtasks = subtasks.map((subtask) =>
+      subtask.id === id ? { ...subtask, ...updatedSubtask } : subtask
+    );
+    onChange?.(newSubtasks);
+  };
 
   return (
     <div className='space-y-3'>

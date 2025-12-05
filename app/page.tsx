@@ -1,50 +1,35 @@
+'use client'
 import TaskForm from "@/components/TaskForm";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import TaskContent from "@/components/TaskContent";
+import HeroPage from "@/components/HeroPage";
+import { useAppSelector } from "@/store/hooks";
+import { useRef } from "react";
 
 export default function Home() {
+  const tasks = useAppSelector((state) => state.tasks);
+  const taskFormRef = useRef<{ openForm: () => void }>(null);
+
+  const hasTasks = tasks.tasks && tasks.tasks.length > 0;
+
+  const handleGetStarted = () => {
+    // Trigger the task form to open
+    taskFormRef.current?.openForm();
+  };
+
   return (
     <div className='flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black'>
-      {/* Top bar */}
-      <div className='p-4'>
-        <TaskForm />
+      {/* Top bar - Always render TaskForm but hide button on hero page */}
+      <div className={`p-4 ${!hasTasks ? 'hidden' : ''}`}>
+        <TaskForm ref={taskFormRef} />
       </div>
 
-      {/* Boards area */}
-      <div className='flex flex-1 w-full gap-4 p-4'>
-        {/* TODO Board */}
-        <Card className='flex-1 flex flex-col'>
-          <CardHeader>
-            <CardTitle className='flex justify-center text-2xl'>
-              Todo Board
-            </CardTitle>
-          </CardHeader>
-          <CardContent className='flex-1'>
-            {/* Todo tasks will go here */}
-          </CardContent>
-        </Card>
+      {/* Conditional content */}
+      {hasTasks ? (
 
-        {/* In Progress Board */}
-        <Card className='flex-1 flex flex-col'>
-          <CardHeader>
-            <CardTitle className='flex justify-center text-2xl'>
-              In Progress
-            </CardTitle>
-          </CardHeader>
-          <CardContent className='flex-1'>
-            {/* In-progress tasks will go here */}
-          </CardContent>
-        </Card>
+        <TaskContent />
 
-        {/* Done Board */}
-        <Card className='flex-1 flex flex-col'>
-          <CardHeader>
-            <CardTitle className='flex justify-center text-2xl'>Done</CardTitle>
-          </CardHeader>
-          <CardContent className='flex-1'>
-            {/* Done tasks will go here */}
-          </CardContent>
-        </Card>
-      </div>
+      ) : <HeroPage onGetStarted={handleGetStarted} />}
+
     </div>
   );
 }

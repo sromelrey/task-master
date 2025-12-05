@@ -4,12 +4,12 @@
 
 | Phase | Task                                                    | Description                                                                                        | Priority | Estimate | Status      |
 | ----- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------- | -------- | ----------- |
-| 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Not Started |
-| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | Not Started |
-| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | Not Started |
-| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | Not Started |
+| 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Done        |
+| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | In Progress |
+| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | In Progress |
+| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | In Progress |
 | 4     | Implement localStorage persistence with 12-hour TTL     | Save tasks + timestamp to localStorage and clear/restore based on a 12-hour time-to-live rule.     | High     | 3h       | Not Started |
-| 5     | Add filters and derived data using useMemo              | Implement basic filters (e.g., status/priority) and memoized derived task lists with `useMemo`.    | Medium   | 3h       | Not Started |
+| 5     | Add filters and derived data using useMemo              | Implement basic filters (e.g., status/priority) and memoized derived task lists with `useMemo`.    | Medium   | 3h       | In Progress |
 | 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | Not Started |
 
 ---
@@ -35,10 +35,10 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Install `@reduxjs/toolkit` and `react-redux`
-- [ ] Create a basic `store/index.ts` and hook it into the Next.js App Router via a `providers.tsx`
+- [x] Install `@reduxjs/toolkit` and `react-redux`
+- [x] Create a basic `store/index.ts` and hook it into the Next.js App Router via a `providers.tsx`
 - [ ] Install `@dnd-kit/core`, `@dnd-kit/sortable`, and `@dnd-kit/utilities`
-- [ ] Verify Redux store is accessible in a test component (e.g., simple counter)
+- [x] Verify Redux store is accessible in a test component (e.g., simple counter)
 - [ ] Verify dnd-kit is working in a minimal example (dragging a single item)
 - [ ] Commit dependency setup and basic wiring
 
@@ -51,11 +51,11 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Create `TaskBoard` component with a basic layout (e.g., columns side by side)
+- [x] Create `TaskBoard` component with a basic layout (e.g., columns side by side)
 - [ ] Create `TaskColumn` component to represent a single column (e.g., Todo, In Progress, Done)
 - [ ] Create `TaskCard` component to represent a single task card
 - [ ] Integrate dnd-kit into `TaskBoard` and `TaskColumn` for drag-and-drop behavior
-- [ ] Use mock/static task data to render the board for now
+- [x] Use mock/static task data to render the board for now (Replaced with Redux state)
 - [ ] Ensure drag-and-drop updates the visual order of cards within and across columns
 - [ ] Commit initial UI + drag-and-drop implementation
 
@@ -68,12 +68,12 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Define a `Task` type (id, title, status, priority, timestamps, etc.)
-- [ ] Create `taskSlice` with actions: addTask, updateTask, deleteTask, moveTask/changeStatus
-- [ ] Replace static mock data in `TaskBoard` with Redux state from `taskSlice`
+- [x] Define a `Task` type (id, title, status, priority, timestamps, etc.)
+- [x] Create `taskSlice` with actions: addTask, updateTask, deleteTask, moveTask/changeStatus
+- [x] Replace static mock data in `TaskBoard` with Redux state from `taskSlice`
 - [ ] Dispatch actions from drag-and-drop handler to update task status/order
-- [ ] Dispatch actions from form components (e.g., `TaskForm`) to add/edit tasks
-- [ ] Confirm UI updates correctly when Redux state changes
+- [x] Dispatch actions from form components (e.g., `TaskForm`) to add/edit tasks
+- [x] Confirm UI updates correctly when Redux state changes
 - [ ] Commit Redux integration for tasks
 
 </details>
@@ -105,8 +105,8 @@
 
 - [ ] Add basic filter state (e.g., selected status, priority) to Redux or local component state
 - [ ] Create a `TaskFilters` component with dropdowns/buttons for filter selection
-- [ ] In `TaskBoard`, use `useMemo` to compute derived lists of tasks based on filters (e.g., filteredTasks)
-- [ ] Ensure `useMemo` dependencies are correctly set (tasks, filter state)
+- [x] In `TaskBoard`, use `useMemo` to compute derived lists of tasks based on filters (e.g., filteredTasks)
+- [x] Ensure `useMemo` dependencies are correctly set (tasks, filter state)
 - [ ] Optionally add “Today” / “Overdue” views based on due dates using memoized computations
 - [ ] Verify that filters update the UI without unnecessary recalculation of unrelated data
 - [ ] Commit filter + `useMemo` integration
