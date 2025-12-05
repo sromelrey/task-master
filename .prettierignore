@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm/
+
+# Build outputs
+.next/
+out/
+dist/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Logs
+*.log
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Config files that should keep their formatting
+.prettierrc
+.eslintrc*

@@ -103,6 +103,7 @@ npm install
 ```
 
 # Folder Structure
+
 ```bash
 src/
 ├── app/

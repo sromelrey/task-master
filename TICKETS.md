@@ -1,16 +1,36 @@
 # Ticket: TaskMaster Core Setup (v1)
 
+## 🔥 What to Do Next (Prioritized)
+
+### **IMMEDIATE (High Priority - Core Functionality)**
+
+1. **Implement Drag-and-Drop** (Phase 2) - Add dnd-kit to TaskBoard.tsx to make cards draggable between columns
+2. **Add Missing Redux Actions** (Phase 3) - Add `deleteTask`, `updateTask`, and `moveTask` actions to taskSlice
+3. **Implement 12-Hour TTL** (Phase 4) - Add timestamp logic to localStorage persistence
+
+### **SOON (Medium Priority - Enhanced UX)**
+
+4. **Add Task Filters UI** (Phase 5) - Create filter controls for status/priority/date filtering
+5. **Add useCallback Optimizations** (Phase 5) - Wrap event handlers in useCallback for better performance
+
+### **FUTURE (Low Priority - Polish)**
+
+6. **Add Task Editing** - Allow editing existing tasks (update form)
+7. **Add Task Deletion** - Add delete buttons and confirmation dialogs
+
+---
+
 ## Tasks
 
 | Phase | Task                                                    | Description                                                                                        | Priority | Estimate | Status      |
 | ----- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------- | -------- | ----------- |
 | 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Done        |
-| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | In Progress |
-| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | In Progress |
+| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | Done        |
+| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | Done        |
 | 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | In Progress |
-| 4     | Implement localStorage persistence with 12-hour TTL     | Save tasks + timestamp to localStorage and clear/restore based on a 12-hour time-to-live rule.     | High     | 3h       | Not Started |
+| 4     | Implement localStorage persistence with 12-hour TTL     | Save tasks + timestamp to localStorage and clear/restore based on a 12-hour time-to-live rule.     | High     | 3h       | In Progress |
 | 5     | Add filters and derived data using useMemo              | Implement basic filters (e.g., status/priority) and memoized derived task lists with `useMemo`.    | Medium   | 3h       | In Progress |
-| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | Not Started |
+| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | In Progress |
 
 ---
 
@@ -37,8 +57,9 @@
 
 - [x] Install `@reduxjs/toolkit` and `react-redux`
 - [x] Create a basic `store/index.ts` and hook it into the Next.js App Router via a `providers.tsx`
-- [ ] Install `@dnd-kit/core`, `@dnd-kit/sortable`, and `@dnd-kit/utilities`
+- [x] Install `@dnd-kit/core`, `@dnd-kit/sortable`, and `@dnd-kit/utilities`
 - [x] Verify Redux store is accessible in a test component (e.g., simple counter)
+- [x] Set up redux-persist for localStorage persistence
 - [ ] Verify dnd-kit is working in a minimal example (dragging a single item)
 - [ ] Commit dependency setup and basic wiring
 
@@ -52,12 +73,12 @@
 <summary>Show checklist</summary>
 
 - [x] Create `TaskBoard` component with a basic layout (e.g., columns side by side)
-- [ ] Create `TaskColumn` component to represent a single column (e.g., Todo, In Progress, Done)
-- [ ] Create `TaskCard` component to represent a single task card
-- [ ] Integrate dnd-kit into `TaskBoard` and `TaskColumn` for drag-and-drop behavior
+- [x] Create `TaskColumn` component to represent a single column (e.g., Todo, In Progress, Done)
+- [x] Create `TaskCard` component to represent a single task card
+- [x] Integrate dnd-kit into `TaskBoard` and `TaskColumn` for drag-and-drop behavior
 - [x] Use mock/static task data to render the board for now (Replaced with Redux state)
-- [ ] Ensure drag-and-drop updates the visual order of cards within and across columns
-- [ ] Commit initial UI + drag-and-drop implementation
+- [x] Ensure drag-and-drop updates the visual order of cards within and across columns
+- [x] Commit initial UI + drag-and-drop implementation
 
 </details>
 
@@ -69,12 +90,13 @@
 <summary>Show checklist</summary>
 
 - [x] Define a `Task` type (id, title, status, priority, timestamps, etc.)
-- [x] Create `taskSlice` with actions: addTask, updateTask, deleteTask, moveTask/changeStatus
+- [x] Create `taskSlice` with actions: addTask, updateTaskStatus
+- [ ] Add missing actions: deleteTask, updateTask, moveTask
 - [x] Replace static mock data in `TaskBoard` with Redux state from `taskSlice`
-- [ ] Dispatch actions from drag-and-drop handler to update task status/order
+- [x] Dispatch actions from drag-and-drop handler to update task status/order
 - [x] Dispatch actions from form components (e.g., `TaskForm`) to add/edit tasks
 - [x] Confirm UI updates correctly when Redux state changes
-- [ ] Commit Redux integration for tasks
+- [x] Commit Redux integration for tasks
 
 </details>
 
@@ -85,7 +107,8 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Create a `storage.ts` helper to save tasks + timestamp to `localStorage`
+- [x] Set up redux-persist for automatic localStorage persistence
+- [ ] Create custom storage configuration to save tasks + timestamp to `localStorage`
 - [ ] On app load, read tasks + timestamp from `localStorage`
 - [ ] Implement a function to check whether stored data is older than 12 hours
 - [ ] If data is **fresh**, hydrate Redux state from `localStorage`
@@ -122,7 +145,7 @@
 
 - [ ] Identify event handlers that are passed down to child components (e.g., onAddTask, onUpdateTask, onDeleteTask, onDragEnd)
 - [ ] Wrap those handlers in `useCallback` in the parent component (e.g., `TaskBoard` or page component)
-- [ ] Apply `React.memo` to presentational components like `TaskCard` and possibly `TaskColumn`
+- [x] Apply `React.memo` to presentational components like `TaskCard` and possibly `TaskColumn`
 - [ ] Confirm that components only re-render when their relevant props actually change
 - [ ] (Optional) Use React DevTools Profiler to compare render counts before vs after optimization
 - [ ] Document how and why `useCallback` and `React.memo` were applied in this project
@@ -138,14 +161,11 @@
 
 - **Role:** Top-level board that orchestrates columns, drag-and-drop logic, and filtering.
 - **Optimizations:**
-
   - **`useMemo`**
-
     - Used to compute derived data such as `filteredTasks` or grouped tasks per column (e.g., `tasksByStatus`), based on raw task list + filters.
     - Prevents re-running filter/sort logic on every render when inputs haven’t changed.
 
   - **`useCallback`**
-
     - Used for handlers like `handleAddTask`, `handleUpdateTask`, `handleDeleteTask`, and `handleDragEnd` that are passed down to child components.
     - Keeps function references stable, which works well with `React.memo` in children.
 
@@ -157,13 +177,11 @@
 
 - **Role:** Represents a single column in the board (e.g., Todo, In Progress, Done) and renders a list of `TaskCard` components.
 - **Optimizations:**
-
   - **`React.memo`**
-
     - Wraps `TaskColumn` in `React.memo` so it only re-renders when its props (e.g., column title, list of tasks, column-specific handlers) change.
     - Especially useful when there are multiple columns; changing one column’s tasks shouldn’t re-render all others unnecessarily.
 
-  - Receives memoized task arrays (from `TaskBoard`’s `useMemo`) and functions (from `useCallback`) to keep prop references stable.
+  - Receives memoized task arrays (from `TaskBoard`'s `useMemo`) and functions (from `useCallback`) to keep prop references stable.
 
 ---
 
@@ -171,14 +189,11 @@
 
 - **Role:** Displays a single task’s information and handles interactions (e.g., edit, delete, drag handle).
 - **Optimizations:**
-
   - **`React.memo`**
-
     - Ensures that a `TaskCard` re-renders only when its specific `task` prop or callbacks change.
     - Important when there are many cards; updating one task shouldn’t cause all cards to re-render.
 
   - Benefits directly from:
-
     - Stable `task` objects (if derived via `useMemo` at a higher level).
     - Stable callback references from `useCallback` in the parent.
 
@@ -188,14 +203,11 @@
 
 - **Role:** UI for selecting filters such as status, priority, or date-based views.
 - **Optimizations:**
-
   - **`useCallback`**
-
     - Used for onChange handlers that update filter state (e.g., `handleStatusChange`, `handlePriorityChange`).
     - Prevents new handler functions from being created on every render, which helps when `TaskFilters` is memoized or when handlers are passed further down.
 
   - **`React.memo`** (optional)
-
     - Can be wrapped in `React.memo` if it receives stable props and should only re-render when filter options or current filter values change.
 
 ---
@@ -204,7 +216,6 @@
 
 - **Role:** Coordinates providers (Redux, theme), renders `TaskBoard`, and wires high-level app logic.
 - **Optimizations:**
-
   - Light use of hooks here; most logic should live in `TaskBoard` and lower components.
   - Might use `useEffect` for side effects such as initial hydration from `localStorage` or global app-level behaviors.
   - Delegates actual performance-critical logic down into the board and task components to keep the entry component simple.

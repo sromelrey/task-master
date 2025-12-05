@@ -1,5 +1,5 @@
-'use client'
-import { forwardRef, useImperativeHandle, useState } from "react";
+'use client';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import {
   Sheet,
   SheetTrigger,
@@ -9,18 +9,18 @@ import {
   SheetDescription,
   SheetFooter,
   SheetClose,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "./ui/textarea";
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from './ui/textarea';
 
-import SubTaskList from "./SubTaskList";
-import TaskTime from "./TaskTime";
-import { useAppSelector } from "@/store/hooks";
-import { useDispatch } from "react-redux";
-import { addTask, Task } from "@/store/slices/taskSlice";
-import { SubTask } from "@/store/slices/taskSlice";
+import SubTaskList from './SubTaskList';
+import TaskTime from './TaskTime';
+import { useAppSelector } from '@/store/hooks';
+import { useDispatch } from 'react-redux';
+import { addTask, Task } from '@/store/slices/taskSlice';
+import { SubTask } from '@/store/slices/taskSlice';
 
 export interface TaskFormRef {
   openForm: () => void;
@@ -51,20 +51,21 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
     dispatch(addTask(newTask));
     setOpen(false); // Close the sheet after adding task
     setSubtasks([]); // Reset subtasks after submission
-  }
-
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       {/* Button at the top (wherever you place <TaskForm /> in the page) */}
       <SheetTrigger asChild>
-        <Button>Add task</Button>
+        <Button className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full">
+          Add task
+        </Button>
       </SheetTrigger>
 
       {/* Sheet sliding from the top */}
-      <SheetContent side='top' className='max-h-[70vh] overflow-y-auto'>
-        <form onSubmit={handleAddTask} >
-          <div className='mx-auto w-full max-w-md'>
+      <SheetContent side="top" className="max-h-[70vh] overflow-y-auto">
+        <form onSubmit={handleAddTask}>
+          <div className="mx-auto w-full max-w-md">
             <SheetHeader>
               <SheetTitle>Add a new task</SheetTitle>
               <SheetDescription>
@@ -73,43 +74,45 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
             </SheetHeader>
 
             {/* Simple placeholder form */}
-            <div className='space-y-4 px-4 pb-4 pt-4'>
-              <div className='space-y-2'>
-                <Label htmlFor='title'>Title</Label>
-                <Input id='title' name="title" placeholder='e.g. Fix login bug' />
+            <div className="space-y-4 px-4 pb-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input id="title" name="title" placeholder="e.g. Fix login bug" />
               </div>
-              <div className='space-y-2'>
-                <Label htmlFor='status'>Status</Label>
+              <div className="space-y-2">
+                <Label htmlFor="status">Status</Label>
                 <Input
-                  id='status'
+                  id="status"
                   name="status"
-                  value={"todo"}
+                  value={'todo'}
                   disabled={true}
-                  placeholder='todo'
+                  placeholder="todo"
                 />
               </div>
-              <div className='space-y-2'>
-                <Label htmlFor='status'>Status</Label>
+              <div className="space-y-2">
+                <Label htmlFor="status">Status</Label>
                 <SubTaskList value={subtasks} onChange={setSubtasks} />
               </div>
 
-              <div className='space-y-2'>
-                <Label htmlFor='description'>Description</Label>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
                 <Textarea
-                  id='description'
+                  id="description"
                   name="description"
-                  placeholder='Description or more details about the task'
+                  placeholder="Description or more details about the task"
                 />
               </div>
               <TaskTime />
             </div>
 
-            <SheetFooter className='px-4 pb-4'>
+            <SheetFooter className="px-4 pb-4">
               <SheetClose asChild>
-                <Button type='submit' className=" cursor-pointer">Save task</Button>
+                <Button type="submit" className=" cursor-pointer">
+                  Save task
+                </Button>
               </SheetClose>
               <SheetClose asChild>
-                <Button variant='outline'>Cancel</Button>
+                <Button variant="outline">Cancel</Button>
               </SheetClose>
             </SheetFooter>
           </div>
@@ -122,4 +125,3 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
 TaskForm.displayName = 'TaskForm';
 
 export default TaskForm;
-
