@@ -10,6 +10,11 @@ export function useTaskCleanup() {
   const didRunRef = useRef(false);
 
   useEffect(() => {
+    // Only run on client side to prevent hydration mismatches
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if (didRunRef.current) {
       return;
     }
