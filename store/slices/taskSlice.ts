@@ -14,6 +14,8 @@ export interface Task {
   status: 'todo' | 'in-progress' | 'done';
   startTime?: string;
   endTime?: string;
+  createdAt?: string;
+  lastUpdatedAt?: string;
 }
 
 interface TaskState {
@@ -24,12 +26,35 @@ const initialState: TaskState = {
   tasks: [],
 };
 
+const getTimestamp = () => new Date().toISOString();
+
 const tasksSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<Task>) => {
-      state.tasks.push(action.payload);
+      const now = getTimestamp();
+      state.tasks.push({
+        ...action.payload,
+        createdAt: action.payload.createdAt ?? now,
+        lastUpdatedAt: action.payload.lastUpdatedAt ?? now,
+      });
+    },
+    // Add to taskSlice.ts reducers:
+    deleteTask: (state, action: PayloadAction<string>) => {
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+    },
+    updateTask: (state, action: PayloadAction<Task>) => {
+      const index = state.tasks.findIndex((task) => task.id === action.payload.id);
+      if (index !== -1) {
+        const now = getTimestamp();
+        const previous = state.tasks[index];
+        state.tasks[index] = {
+          ...action.payload,
+          createdAt: previous.createdAt ?? action.payload.createdAt ?? now,
+          lastUpdatedAt: now,
+        };
+      }
     },
     updateTaskStatus: (
       state,
@@ -43,5 +68,5 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, updateTaskStatus } = tasksSlice.actions;
+export const { addTask, updateTaskStatus, deleteTask, updateTask } = tasksSlice.actions;
 export default tasksSlice.reducer;

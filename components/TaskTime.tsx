@@ -1,26 +1,23 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 
-function TaskTime() {
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
+interface TaskTimeProps {
+  initialStartTime?: string;
+  initialEndTime?: string;
+  onTimeChange?: (times: { startTime: string; endTime: string }) => void;
+}
 
-  // Initialize both times to the current time on mount (seconds omitted)
-  useEffect(() => {
-    const formatTime = (date: Date) => {
-      return date.toLocaleTimeString('en-GB', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        // second omitted intentionally
-      });
-    };
-    const now = formatTime(new Date());
-    setStartTime(now);
-    setEndTime(now);
-  }, []);
+function TaskTime({ initialStartTime, initialEndTime, onTimeChange }: TaskTimeProps) {
+  // For editing existing tasks, use provided times; for new tasks, use current time
+  const [startTime, setStartTime] = useState<string>(() => initialStartTime || new Date().toLocaleTimeString('en-GB', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+  }));
+
+  const [endTime, setEndTime] = useState<string>(() => initialEndTime || startTime);
 
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStart = e.target.value;
@@ -40,6 +37,10 @@ function TaskTime() {
       setEndTime(startTime);
     }
   };
+
+  useEffect(() => {
+    onTimeChange?.({ startTime, endTime });
+  }, [startTime, endTime, onTimeChange]);
 
   return (
     <div className="flex flex-row w-full justify-evenly gap-4">

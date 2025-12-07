@@ -1,11 +1,16 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import TaskColumn from './TaskColumn';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { updateTaskStatus } from '@/store/slices/taskSlice';
+import { updateTaskStatus, Task } from '@/store/slices/taskSlice';
+import { TaskFormRef } from './TaskForm';
 
-export default function TaskBoard() {
+interface TaskBoardProps {
+  taskFormRef: React.RefObject<TaskFormRef | null>;
+}
+
+export default function TaskBoard({ taskFormRef }: TaskBoardProps) {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector((state) => state.tasks);
 
@@ -25,7 +30,7 @@ export default function TaskBoard() {
     [tasks.tasks]
   );
 
-  const handleDragEnd = (result: DragEndEvent) => {
+  const handleDragEnd = useCallback((result: DragEndEvent) => {
     const { active, over } = result;
 
     if (!over) return;
@@ -37,13 +42,23 @@ export default function TaskBoard() {
     if (task && task.status !== newStatus) {
       dispatch(updateTaskStatus({ id: taskId, status: newStatus }));
     }
-  };
+  }, [dispatch, tasks.tasks]);
+
+  const handleEditTask = useCallback((task: Task) => {
+    taskFormRef.current?.openFormForEdit(task);
+  }, [taskFormRef]);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div className="flex flex-1 w-full gap-4 p-4">
         {/* TODO Board */}
-        <TaskColumn title="Todo" tasks={todoTasks} count={todoTasks.length} status="todo" />
+        <TaskColumn
+          title="Todo"
+          tasks={todoTasks}
+          count={todoTasks.length}
+          status="todo"
+          onEdit={handleEditTask}
+        />
 
         {/* In Progress Board */}
         <TaskColumn
@@ -51,10 +66,17 @@ export default function TaskBoard() {
           tasks={inProgressTasks}
           count={inProgressTasks.length}
           status="in-progress"
+          onEdit={handleEditTask}
         />
 
         {/* Done Board */}
-        <TaskColumn title="Done" tasks={doneTasks} count={doneTasks.length} status="done" />
+        <TaskColumn
+          title="Done"
+          tasks={doneTasks}
+          count={doneTasks.length}
+          status="done"
+          onEdit={handleEditTask}
+        />
       </div>
     </DndContext>
   );

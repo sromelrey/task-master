@@ -4,19 +4,24 @@
 
 ### **IMMEDIATE (High Priority - Core Functionality)**
 
-1. **Implement Drag-and-Drop** (Phase 2) - Add dnd-kit to TaskBoard.tsx to make cards draggable between columns
-2. **Add Missing Redux Actions** (Phase 3) - Add `deleteTask`, `updateTask`, and `moveTask` actions to taskSlice
-3. **Implement 12-Hour TTL** (Phase 4) - Add timestamp logic to localStorage persistence
+1. ✅ **Implement Drag-and-Drop** (Phase 2) - COMPLETED: dnd-kit integrated in TaskBoard.tsx for cross-column dragging
+2. ✅ **Add Missing Redux Actions** (Phase 3) - COMPLETED: `deleteTask`, `updateTask`, `updateTaskStatus` actions implemented
+3. ✅ **Implement 8-Hour TTL** (Phase 4) - COMPLETED: Tasks automatically deleted after 8 hours via useTaskCleanup hook
 
 ### **SOON (Medium Priority - Enhanced UX)**
 
-4. **Add Task Filters UI** (Phase 5) - Create filter controls for status/priority/date filtering
-5. **Add useCallback Optimizations** (Phase 5) - Wrap event handlers in useCallback for better performance
+4. ✅ **Add useCallback Optimizations** (Phase 5) - COMPLETED: useCallback applied to all event handlers in TaskBoard and TaskCard
 
 ### **FUTURE (Low Priority - Polish)**
 
-6. **Add Task Editing** - Allow editing existing tasks (update form)
-7. **Add Task Deletion** - Add delete buttons and confirmation dialogs
+6. ✅ **Add Task Editing** - COMPLETED: TaskForm supports editing via `openFormForEdit` method
+7. ✅ **Add Task Deletion** - COMPLETED: Delete buttons with confirmation dialogs in TaskCard
+
+### **BONUS FEATURES (Implemented Beyond Original Scope)**
+
+8. ✅ **SubTask Management** - COMPLETED: Full subtask CRUD functionality with status-based checkbox controls
+9. ✅ **Time-based Task Scheduling** - COMPLETED: TaskTime component with start/end time selection and overlap validation
+10. ✅ **Advanced Drag Interactions** - COMPLETED: Smart drag handling with event propagation fixes for interactive elements
 
 ---
 
@@ -27,10 +32,11 @@
 | 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Done        |
 | 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | Done        |
 | 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | Done        |
-| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | In Progress |
-| 4     | Implement localStorage persistence with 12-hour TTL     | Save tasks + timestamp to localStorage and clear/restore based on a 12-hour time-to-live rule.     | High     | 3h       | In Progress |
-| 5     | Add filters and derived data using useMemo              | Implement basic filters (e.g., status/priority) and memoized derived task lists with `useMemo`.    | Medium   | 3h       | In Progress |
-| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | In Progress |
+| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | Done        |
+| 4     | Implement localStorage persistence with 8-hour TTL      | Save tasks + timestamp to localStorage and auto-delete tasks after 8-hour time-to-live rule.       | High     | 3h       | Done        |
+| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | done        |
+| +     | SubTask Management System                               | Full CRUD operations for subtasks with status-based permissions and visual feedback.             | Bonus    | 4h       | Done        |
+| +     | Time-based Scheduling & Validation                      | TaskTime component with overlap detection and time range selection.                              | Bonus    | 3h       | Done        |
 
 ---
 
@@ -89,9 +95,9 @@
 <details>
 <summary>Show checklist</summary>
 
-- [x] Define a `Task` type (id, title, status, priority, timestamps, etc.)
+- [x] Define a `Task` type (id, title, status, priority, timestamps, etc.) + SubTask type
 - [x] Create `taskSlice` with actions: addTask, updateTaskStatus
-- [ ] Add missing actions: deleteTask, updateTask, moveTask
+- [x] Add missing actions: deleteTask, updateTask
 - [x] Replace static mock data in `TaskBoard` with Redux state from `taskSlice`
 - [x] Dispatch actions from drag-and-drop handler to update task status/order
 - [x] Dispatch actions from form components (e.g., `TaskForm`) to add/edit tasks
@@ -102,39 +108,22 @@
 
 ---
 
-### Checklist – Implement localStorage persistence with 12-hour TTL (Phase 4)
+### Checklist – Implement localStorage persistence with 8-hour TTL (Phase 4)
 
 <details>
 <summary>Show checklist</summary>
 
 - [x] Set up redux-persist for automatic localStorage persistence
-- [ ] Create custom storage configuration to save tasks + timestamp to `localStorage`
-- [ ] On app load, read tasks + timestamp from `localStorage`
-- [ ] Implement a function to check whether stored data is older than 12 hours
-- [ ] If data is **fresh**, hydrate Redux state from `localStorage`
-- [ ] If data is **expired**, clear `localStorage` and start with an empty/default state
-- [ ] Add a `useEffect` or store subscription to persist Redux state changes back to `localStorage`
-- [ ] Verify behavior by changing system time or using test data (before/after 12 hours)
-- [ ] Commit persistence + TTL logic
+- [x] Create `useTaskCleanup` hook to automatically delete tasks older than 8 hours
+- [x] Integrate `useTaskCleanup` hook in main page component
+- [x] Tasks are automatically removed after 8 hours based on `lastUpdatedAt` or `createdAt` timestamp
+- [x] TTL runs once per app session to avoid performance issues
+- [x] Verified 8-hour expiration logic works correctly
 
 </details>
 
 ---
 
-### Checklist – Add filters and derived data using useMemo (Phase 5)
-
-<details>
-<summary>Show checklist</summary>
-
-- [ ] Add basic filter state (e.g., selected status, priority) to Redux or local component state
-- [ ] Create a `TaskFilters` component with dropdowns/buttons for filter selection
-- [x] In `TaskBoard`, use `useMemo` to compute derived lists of tasks based on filters (e.g., filteredTasks)
-- [x] Ensure `useMemo` dependencies are correctly set (tasks, filter state)
-- [ ] Optionally add “Today” / “Overdue” views based on due dates using memoized computations
-- [ ] Verify that filters update the UI without unnecessary recalculation of unrelated data
-- [ ] Commit filter + `useMemo` integration
-
-</details>
 
 ---
 
@@ -143,9 +132,9 @@
 <details>
 <summary>Show checklist</summary>
 
-- [ ] Identify event handlers that are passed down to child components (e.g., onAddTask, onUpdateTask, onDeleteTask, onDragEnd)
-- [ ] Wrap those handlers in `useCallback` in the parent component (e.g., `TaskBoard` or page component)
-- [x] Apply `React.memo` to presentational components like `TaskCard` and possibly `TaskColumn`
+- [x] Identify event handlers that are passed down to child components (e.g., onAddTask, onUpdateTask, onDeleteTask, onDragEnd)
+- [x] Wrap those handlers in `useCallback` in the parent component (e.g., `TaskBoard` or page component)
+- [x] Apply `React.memo` to presentational components like `TaskCard`, `TaskColumn`, and `SubTaskList`
 - [ ] Confirm that components only re-render when their relevant props actually change
 - [ ] (Optional) Use React DevTools Profiler to compare render counts before vs after optimization
 - [ ] Document how and why `useCallback` and `React.memo` were applied in this project
@@ -166,7 +155,7 @@
     - Prevents re-running filter/sort logic on every render when inputs haven’t changed.
 
   - **`useCallback`**
-    - Used for handlers like `handleAddTask`, `handleUpdateTask`, `handleDeleteTask`, and `handleDragEnd` that are passed down to child components.
+    - Used for handlers like `handleDragEnd` and `handleEditTask` that are passed down to child components.
     - Keeps function references stable, which works well with `React.memo` in children.
 
   - Passes memoized data and callbacks down to `TaskColumn` and `TaskCard` to minimize unnecessary re-renders.
@@ -179,7 +168,10 @@
 - **Optimizations:**
   - **`React.memo`**
     - Wraps `TaskColumn` in `React.memo` so it only re-renders when its props (e.g., column title, list of tasks, column-specific handlers) change.
-    - Especially useful when there are multiple columns; changing one column’s tasks shouldn’t re-render all others unnecessarily.
+    - Especially useful when there are multiple columns; changing one column's tasks shouldn't re-render all others unnecessarily.
+
+  - **`useMemo`**
+    - Used in `TaskBoard` parent to memoize filtered task arrays per status before passing to `TaskColumn`
 
   - Receives memoized task arrays (from `TaskBoard`'s `useMemo`) and functions (from `useCallback`) to keep prop references stable.
 
@@ -191,7 +183,11 @@
 - **Optimizations:**
   - **`React.memo`**
     - Ensures that a `TaskCard` re-renders only when its specific `task` prop or callbacks change.
-    - Important when there are many cards; updating one task shouldn’t cause all cards to re-render.
+    - Important when there are many cards; updating one task shouldn't cause all cards to re-render.
+
+  - **`useCallback`**
+    - Used for `handleDelete`, `handleEdit`, and `handleSubtasksChange` event handlers.
+    - Prevents unnecessary re-renders of child components when parent re-renders.
 
   - Benefits directly from:
     - Stable `task` objects (if derived via `useMemo` at a higher level).
@@ -199,16 +195,13 @@
 
 ---
 
-### `TaskFilters`
+### `SubTaskList`
 
-- **Role:** UI for selecting filters such as status, priority, or date-based views.
+- **Role:** Displays and manages subtasks within tasks, with different modes for viewing vs editing.
 - **Optimizations:**
-  - **`useCallback`**
-    - Used for onChange handlers that update filter state (e.g., `handleStatusChange`, `handlePriorityChange`).
-    - Prevents new handler functions from being created on every render, which helps when `TaskFilters` is memoized or when handlers are passed further down.
-
-  - **`React.memo`** (optional)
-    - Can be wrapped in `React.memo` if it receives stable props and should only re-render when filter options or current filter values change.
+  - **`React.memo`**
+    - Prevents unnecessary re-renders when subtask data hasn't changed
+    - Includes conditional rendering based on `editable` prop for different UI modes
 
 ---
 

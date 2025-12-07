@@ -1,13 +1,15 @@
 'use client';
-import TaskForm from '@/components/TaskForm';
+import TaskForm, { TaskFormRef } from '@/components/TaskForm';
 import TaskBoard from '@/components/TaskBoard';
 import HeroPage from '@/components/HeroPage';
 import { useAppSelector } from '@/store/hooks';
 import { useRef } from 'react';
+import { useTaskCleanup } from '@/hooks/useTaskCleanup';
 
 export default function Home() {
   const tasks = useAppSelector((state) => state.tasks);
-  const taskFormRef = useRef<{ openForm: () => void }>(null);
+  const taskFormRef = useRef<TaskFormRef>(null);
+  useTaskCleanup();
 
   const hasTasks = tasks.tasks && tasks.tasks.length > 0;
 
@@ -24,7 +26,11 @@ export default function Home() {
       </div>
 
       {/* Conditional content */}
-      {hasTasks ? <TaskBoard /> : <HeroPage onGetStarted={handleGetStarted} />}
+      {hasTasks ? (
+        <TaskBoard taskFormRef={taskFormRef} />
+      ) : (
+        <HeroPage onGetStarted={handleGetStarted} />
+      )}
     </div>
   );
 }
