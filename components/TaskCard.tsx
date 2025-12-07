@@ -20,7 +20,7 @@ export default memo(function TaskCard({ task, onEdit }: TaskCardProps) {
     id: task.id,
   });
 
-  const stopPropagation = (event: React.PointerEvent<HTMLButtonElement>) => {
+  const stopPropagation = (event: React.SyntheticEvent) => {
     event.stopPropagation();
   };
 
@@ -56,12 +56,13 @@ export default memo(function TaskCard({ task, onEdit }: TaskCardProps) {
       {...listeners}
       {...attributes}
     >
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2 sm:pb-3">
         <div className="flex items-start justify-between">
-          <CardTitle className="text-lg flex-1">{task.title}</CardTitle>
+          <CardTitle className="text-base sm:text-lg flex-1 pr-2">{task.title}</CardTitle>
             <div
-              className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="flex gap-1 ml-1 sm:ml-2 opacity-0 group-hover:opacity-100 max-sm:opacity-100 transition-opacity flex-shrink-0"
               onPointerDown={(event) => event.stopPropagation()}
+              onTouchStart={(event) => event.stopPropagation()}
             >
             <Button
               variant="ghost"
@@ -69,6 +70,7 @@ export default memo(function TaskCard({ task, onEdit }: TaskCardProps) {
                 type="button"
               onClick={handleEdit}
                 onPointerDown={stopPropagation}
+                onTouchStart={stopPropagation}
                 disabled={isDragging}
               className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30"
             >
@@ -80,6 +82,7 @@ export default memo(function TaskCard({ task, onEdit }: TaskCardProps) {
                 type="button"
               onClick={handleDelete}
                 onPointerDown={stopPropagation}
+                onTouchStart={stopPropagation}
                 disabled={isDragging}
               className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600"
             >
@@ -88,22 +91,22 @@ export default memo(function TaskCard({ task, onEdit }: TaskCardProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{task.description}</p>
+      <CardContent className="pt-0">
+        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">{task.description}</p>
         {task.subtasks && task.subtasks.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-2 sm:mb-3">
             <SubTaskList value={task.subtasks} onChange={handleSubtasksChange} status={task.status} />
           </div>
         )}
         {(task.startTime || task.endTime) && (
-          <div className="flex gap-2 text-xs text-gray-500">
+          <div className="flex flex-wrap gap-1 sm:gap-2 text-xs text-gray-500">
             {task.startTime && (
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs">
                 Start: {task.startTime}
               </span>
             )}
             {task.endTime && (
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs">
                 End: {task.endTime}
               </span>
             )}

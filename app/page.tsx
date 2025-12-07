@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
       {/* Top bar - Always render TaskForm but hide button on hero page */}
-      <div className={`p-4 ${!hasTasks ? 'hidden' : ''}`}>
+      <div className={`p-2 sm:p-4 ${!hasTasks ? 'hidden' : ''}`}>
         <TaskForm ref={taskFormRef} />
       </div>
 

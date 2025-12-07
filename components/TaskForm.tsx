@@ -19,6 +19,7 @@ import SubTaskList from './SubTaskList';
 import TaskTime from './TaskTime';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addTask, updateTask, Task, SubTask } from '@/store/slices/taskSlice';
+import tasksReducer from '@/store/slices/taskSlice';
 import { checkTimeOverlap } from '@/lib/utils';
 
 export interface TaskFormRef {
@@ -33,23 +34,34 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
   const [subtasks, setSubtasks] = useState<SubTask[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const clearOverlapError = () => {
     if (error) {
       setError(null);
     }
   };
 
+  // Reset form state to initial values
+  const resetFormState = () => {
+    setSubtasks([]);
+    setEditingTask(null);
+    setError(null);
+    setTitle('');
+    setDescription('');
+  };
+
   // Expose openForm methods to parent
   useImperativeHandle(ref, () => ({
     openForm: () => {
-      setEditingTask(null);
-      setSubtasks([]);
-      setError(null);
+      resetFormState();
       setOpen(true);
     },
     openFormForEdit: (task: Task) => {
       setEditingTask(task);
       setSubtasks(task.subtasks);
+      setTitle(task.title);
+      setDescription(task.description);
       setError(null);
       setOpen(true);
     },
@@ -60,6 +72,12 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
     const formData = new FormData(e.currentTarget);
     const now = new Date().toISOString();
     setError(null);
+
+    // Validate required fields
+    if (!title.trim()) {
+      setError('Title is required');
+      return;
+    }
 
     const startTime = (formData.get('time-picker-start') as string) || undefined;
     const endTime = (formData.get('time-picker-end') as string) || undefined;
@@ -81,8 +99,8 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
       // Update existing task
       const updatedTask: Task = {
         ...editingTask,
-        title: formData.get('title') as string,
-        description: formData.get('description') as string,
+        title: title,
+        description: description,
         subtasks: subtasks,
         startTime,
         endTime,
@@ -93,8 +111,8 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
       // Create new task
       const newTask: Task = {
         id: crypto.randomUUID(),
-        title: formData.get('title') as string,
-        description: formData.get('description') as string,
+        title: title,
+        description: description,
         subtasks: subtasks,
         status: 'todo',
         startTime,
@@ -106,12 +124,19 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
     }
 
     setOpen(false);
-    setSubtasks([]);
-    setEditingTask(null);
+    resetFormState();
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      // Reset form state when sheet closes
+      resetFormState();
+    }
   };
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       {/* Button at the top (wherever you place <TaskForm /> in the page) */}
       <SheetTrigger asChild>
         <Button className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full">
@@ -120,9 +145,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
       </SheetTrigger>
 
       {/* Sheet sliding from the top */}
-      <SheetContent side="top" className="max-h-[70vh] overflow-y-auto">
+      <SheetContent side="top" className="max-h-[80vh] sm:max-h-[70vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
-          <div className="mx-auto w-full max-w-md">
+          <div className="mx-auto w-full max-w-md px-4 sm:px-0">
             <SheetHeader>
               <SheetTitle>{editingTask ? 'Edit task' : 'Add a new task'}</SheetTitle>
               <SheetDescription>
@@ -134,14 +159,15 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
             </SheetHeader>
 
             {/* Simple placeholder form */}
-            <div className="space-y-4 px-4 pb-4 pt-4">
+            <div className="space-y-3 sm:space-y-4 pb-4 pt-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
                   name="title"
                   placeholder="e.g. Fix login bug"
-                  defaultValue={editingTask?.title || ''}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -165,7 +191,8 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
                   id="description"
                   name="description"
                   placeholder="Description or more details about the task"
-                  defaultValue={editingTask?.description || ''}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <TaskTime
@@ -177,11 +204,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
             </div>
 
             <SheetFooter className="px-4 pb-4">
-              <SheetClose asChild>
-                <Button type="submit" className=" cursor-pointer">
-                  Save task
-                </Button>
-              </SheetClose>
+              <Button type="submit" className=" cursor-pointer">
+                Save task
+              </Button>
               <SheetClose asChild>
                 <Button variant="outline">Cancel</Button>
               </SheetClose>

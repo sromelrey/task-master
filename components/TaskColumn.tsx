@@ -37,20 +37,20 @@ export default function TaskColumn({ title, tasks, count, status, onEdit }: Task
   return (
     <Card
       ref={setNodeRef}
-      className={`flex-1 flex flex-col bg-blue-50/50 dark:bg-blue-950/20 transition-colors ${
+      className={`flex-1 flex flex-col bg-blue-50/50 dark:bg-blue-950/20 transition-colors min-h-[300px] sm:min-h-[400px] ${
         isOver ? 'ring-2 ring-blue-400 bg-blue-100/50 dark:bg-blue-900/40' : ''
       }`}
     >
-      <CardHeader>
-        <CardTitle className="flex justify-center text-2xl">{title}</CardTitle>
-        <p className="text-sm text-center text-gray-500">{count} tasks</p>
+      <CardHeader className="pb-2 sm:pb-4">
+        <CardTitle className="flex justify-center text-lg sm:text-2xl">{title}</CardTitle>
+        <p className="text-xs sm:text-sm text-center text-gray-500">{count} tasks</p>
       </CardHeader>
-      <CardContent className="flex-1">
-        <div className="space-y-3">
+      <CardContent className="flex-1 px-2 sm:px-6 pb-2 sm:pb-6">
+        <div className="space-y-2 sm:space-y-3">
                 {sortedTasks.map((task) => (
                     <TaskCard key={task.id} task={task} onEdit={onEdit} />
                 ))}
-          {tasks.length === 0 && <p className="text-center text-gray-400 py-8">No tasks yet</p>}
+          {tasks.length === 0 && <p className="text-center text-gray-400 py-6 sm:py-8 text-sm">No tasks yet</p>}
         </div>
       </CardContent>
     </Card>

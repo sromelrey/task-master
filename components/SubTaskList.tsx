@@ -22,7 +22,7 @@ interface SubTaskListProps {
 const SubTaskList = memo(function SubTaskList({ value = [], onChange, status, editable = false }: SubTaskListProps) {
   const subtasks = value;
 
-  const stopPropagation = (event: React.PointerEvent<HTMLElement>) => {
+  const stopPropagation = (event: React.SyntheticEvent) => {
     event.stopPropagation();
   };
 
@@ -44,28 +44,32 @@ const SubTaskList = memo(function SubTaskList({ value = [], onChange, status, ed
   };
 
   return (
-    <div className="space-y-3">
-      <div className="space-y-2">
+    <div className="space-y-2 sm:space-y-3">
+      <div className="space-y-1.5 sm:space-y-2">
         {subtasks.map((subtask) => (
-          <div key={subtask.id} className="flex items-center gap-2 rounded-md border px-2 py-1">
+          <div key={subtask.id} className="flex items-center gap-1.5 sm:gap-2 rounded-md border px-1.5 sm:px-2 py-1 sm:py-1">
             <Checkbox
               checked={subtask.completed}
               disabled={!editable && status !== 'in-progress'}
               onPointerDown={stopPropagation}
+              onTouchStart={stopPropagation}
               onCheckedChange={(checked) =>
                 updateSubtask(subtask.id, { completed: Boolean(checked) })
               }
+              className="flex-shrink-0"
             />
             {editable ? (
               <Input
                 value={subtask.text}
                 placeholder="Subtask title"
                 onPointerDown={stopPropagation}
+                onTouchStart={stopPropagation}
                 onChange={(e) => updateSubtask(subtask.id, { text: e.target.value })}
+                className="text-xs sm:text-sm h-7 sm:h-8"
               />
             ) : (
               <span
-                className={`text-sm flex-1 ${
+                className={`text-xs sm:text-sm flex-1 ${
                   subtask.completed
                     ? 'line-through text-gray-500'
                     : 'text-gray-700 dark:text-gray-300'
@@ -80,9 +84,11 @@ const SubTaskList = memo(function SubTaskList({ value = [], onChange, status, ed
                 size="icon"
                 variant="ghost"
                 onPointerDown={stopPropagation}
+                onTouchStart={stopPropagation}
                 onClick={() => removeSubtask(subtask.id)}
+                className="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             )}
           </div>
@@ -90,7 +96,7 @@ const SubTaskList = memo(function SubTaskList({ value = [], onChange, status, ed
       </div>
 
       {editable && (
-        <Button type="button" variant="outline" size="sm" onPointerDown={stopPropagation} onClick={addSubtask}>
+        <Button type="button" variant="outline" size="sm" onPointerDown={stopPropagation} onTouchStart={stopPropagation} onClick={addSubtask} className="w-full sm:w-auto text-xs sm:text-sm">
           + Add subtask
         </Button>
       )}
