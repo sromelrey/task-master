@@ -7,13 +7,25 @@ import { useRef, useEffect, useState } from 'react';
 import { useTaskCleanup } from '@/hooks/useTaskCleanup';
 
 export default function Home() {
-  // Prevent hydration mismatch by ensuring client-side only rendering
+  // All hooks must be called at the top level, before any conditional returns
   const [isClient, setIsClient] = useState(false);
+  const tasks = useAppSelector((state) => state.tasks);
+  const taskFormRef = useRef<TaskFormRef>(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  useTaskCleanup();
+
+  const hasTasks = tasks.tasks && tasks.tasks.length > 0;
+
+  const handleGetStarted = () => {
+    // Trigger the task form to open
+    taskFormRef.current?.openForm();
+  };
+
+  // Show loading state until client-side hydration is complete
   if (!isClient) {
     return (
       <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
@@ -26,43 +38,6 @@ export default function Home() {
       </div>
     );
   }
-
-  const tasks = useAppSelector((state) => state.tasks);
-  const taskFormRef = useRef<TaskFormRef>(null);
-  useTaskCleanup();
-
-  const hasTasks = tasks.tasks && tasks.tasks.length > 0;
-
-  const handleGetStarted = () => {
-    // Trigger the task form to open
-    taskFormRef.current?.openForm();
-  };
-
-  return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
-      {/* Top bar - Always render TaskForm but hide button on hero page */}
-      <div className={`p-2 sm:p-4 ${!hasTasks ? 'hidden' : ''}`}>
-        <TaskForm ref={taskFormRef} />
-      </div>
-
-      {/* Conditional content */}
-      {hasTasks ? (
-        <TaskBoard taskFormRef={taskFormRef} />
-      ) : (
-        <HeroPage onGetStarted={handleGetStarted} />
-      )}
-    </div>
-  );
-  const tasks = useAppSelector((state) => state.tasks);
-  const taskFormRef = useRef<TaskFormRef>(null);
-  useTaskCleanup();
-
-  const hasTasks = tasks.tasks && tasks.tasks.length > 0;
-
-  const handleGetStarted = () => {
-    // Trigger the task form to open
-    taskFormRef.current?.openForm();
-  };
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
