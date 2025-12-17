@@ -2,7 +2,14 @@
 import { useMemo, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import TaskColumn from './TaskColumn';
-import { DndContext, DragEndEvent, TouchSensor, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { updateTaskStatus, Task } from '@/store/slices/taskSlice';
 import { TaskFormRef } from './TaskForm';
 
@@ -44,30 +51,36 @@ export default function TaskBoard({ taskFormRef }: TaskBoardProps) {
     [tasks.tasks]
   );
 
-  const handleDragEnd = useCallback((result: DragEndEvent) => {
-    const { active, over } = result;
+  const handleDragEnd = useCallback(
+    (result: DragEndEvent) => {
+      const { active, over } = result;
 
-    if (!over) return;
+      if (!over) return;
 
-    const taskId = active.id as string;
-    const newStatus = over.id as 'todo' | 'in-progress' | 'done';
+      const taskId = active.id as string;
+      const newStatus = over.id as 'todo' | 'in-progress' | 'done';
 
-    const task = tasks.tasks.find((task) => task.id === taskId);
-    if (task && task.status !== newStatus) {
-      dispatch(updateTaskStatus({ id: taskId, status: newStatus }));
-    }
-  }, [dispatch, tasks.tasks]);
+      const task = tasks.tasks.find((task) => task.id === taskId);
+      if (task && task.status !== newStatus) {
+        dispatch(updateTaskStatus({ id: taskId, status: newStatus }));
+      }
+    },
+    [dispatch, tasks.tasks]
+  );
 
-  const handleEditTask = useCallback((task: Task) => {
-    taskFormRef.current?.openFormForEdit(task);
-  }, [taskFormRef]);
+  const handleEditTask = useCallback(
+    (task: Task) => {
+      taskFormRef.current?.openFormForEdit(task);
+    },
+    [taskFormRef]
+  );
 
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <div className="flex flex-1 w-full gap-2 sm:gap-4 p-2 sm:p-4 flex-col sm:flex-row min-h-0">
         {/* TODO Board */}
         <TaskColumn
-          title="Todo"
+          title="To Do"
           tasks={todoTasks}
           count={todoTasks.length}
           status="todo"

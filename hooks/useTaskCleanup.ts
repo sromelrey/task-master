@@ -39,4 +39,3 @@ export function useTaskCleanup() {
     });
   }, [dispatch, tasks]);
 }
-

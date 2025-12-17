@@ -27,16 +27,16 @@
 
 ## Tasks
 
-| Phase | Task                                                    | Description                                                                                        | Priority | Estimate | Status      |
-| ----- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------- | -------- | ----------- |
-| 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Done        |
-| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | Done        |
-| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | Done        |
-| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | Done        |
-| 4     | Implement localStorage persistence with 8-hour TTL      | Save tasks + timestamp to localStorage and auto-delete tasks after 8-hour time-to-live rule.       | High     | 3h       | Done        |
-| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | done        |
-| +     | SubTask Management System                               | Full CRUD operations for subtasks with status-based permissions and visual feedback.             | Bonus    | 4h       | Done        |
-| +     | Time-based Scheduling & Validation                      | TaskTime component with overlap detection and time range selection.                              | Bonus    | 3h       | Done        |
+| Phase | Task                                                    | Description                                                                                        | Priority | Estimate | Status |
+| ----- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------- | -------- | ------ |
+| 1     | Initialize Next.js app & UI toolkit                     | Create a Next.js (App Router) project and set up Tailwind CSS and shadcn/ui for the base UI layer. | High     | 2h       | Done   |
+| 1     | Install and configure Redux Toolkit & dnd-kit           | Add Redux Toolkit and React Redux for state management, plus @dnd-kit for drag-and-drop support.   | High     | 2h       | Done   |
+| 2     | Implement TaskBoard layout with columns and cards       | Build `TaskBoard`, `TaskColumn`, and `TaskCard` using static data and drag-and-drop interactions.  | High     | 4h       | Done   |
+| 3     | Add Redux task slice and wire state to the UI           | Create a `taskSlice` and connect it to the board so tasks are managed via Redux state.             | High     | 3h       | Done   |
+| 4     | Implement localStorage persistence with 8-hour TTL      | Save tasks + timestamp to localStorage and auto-delete tasks after 8-hour time-to-live rule.       | High     | 3h       | Done   |
+| 5     | Optimize callbacks and components with useCallback/memo | Use `useCallback` and `React.memo` to reduce unnecessary re-renders in child components.           | Medium   | 3h       | done   |
+| +     | SubTask Management System                               | Full CRUD operations for subtasks with status-based permissions and visual feedback.               | Bonus    | 4h       | Done   |
+| +     | Time-based Scheduling & Validation                      | TaskTime component with overlap detection and time range selection.                                | Bonus    | 3h       | Done   |
 
 ---
 
@@ -123,7 +123,6 @@
 </details>
 
 ---
-
 
 ---
 

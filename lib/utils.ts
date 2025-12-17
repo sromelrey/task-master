@@ -19,12 +19,7 @@ export function parseTimeToSeconds(time?: string) {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
-export function checkTimeOverlap(
-  startA?: string,
-  endA?: string,
-  startB?: string,
-  endB?: string
-) {
+export function checkTimeOverlap(startA?: string, endA?: string, startB?: string, endB?: string) {
   const startSecondsA = parseTimeToSeconds(startA);
   const endSecondsA = parseTimeToSeconds(endA);
   const startSecondsB = parseTimeToSeconds(startB);

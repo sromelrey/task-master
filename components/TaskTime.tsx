@@ -11,11 +11,15 @@ interface TaskTimeProps {
 
 function TaskTime({ initialStartTime, initialEndTime, onTimeChange }: TaskTimeProps) {
   // For editing existing tasks, use provided times; for new tasks, use current time
-  const [startTime, setStartTime] = useState<string>(() => initialStartTime || new Date().toLocaleTimeString('en-GB', {
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-  }));
+  const [startTime, setStartTime] = useState<string>(
+    () =>
+      initialStartTime ||
+      new Date().toLocaleTimeString('en-GB', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+  );
 
   const [endTime, setEndTime] = useState<string>(() => initialEndTime || startTime);
 

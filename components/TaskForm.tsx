@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from './ui/textarea';
+import { toast } from 'sonner';
+import { Plus, ClipboardList } from 'lucide-react';
 
 import SubTaskList from './SubTaskList';
 import TaskTime from './TaskTime';
@@ -75,7 +77,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
 
     // Validate required fields
     if (!title.trim()) {
-      setError('Title is required');
+      toast.error('Title is required', {
+        description: 'Please enter a title for your task.',
+      });
       return;
     }
 
@@ -91,7 +95,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
     });
 
     if (overlaps) {
-      setError('Tasks may not overlap. Pick a different time range.');
+      toast.error('Time slot already taken', {
+        description: 'Tasks may not overlap. Please pick a different time range.',
+      });
       return;
     }
 
@@ -107,6 +113,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
         lastUpdatedAt: now,
       };
       dispatch(updateTask(updatedTask));
+      toast.success('Task updated successfully', {
+        description: `"${title}" has been updated.`,
+      });
     } else {
       // Create new task
       const newTask: Task = {
@@ -121,6 +130,9 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
         lastUpdatedAt: now,
       };
       dispatch(addTask(newTask));
+      toast.success('Task created successfully', {
+        description: `"${title}" has been added to your board.`,
+      });
     }
 
     setOpen(false);
@@ -139,9 +151,16 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
     <Sheet open={open} onOpenChange={handleOpenChange}>
       {/* Button at the top (wherever you place <TaskForm /> in the page) */}
       <SheetTrigger asChild>
-        <Button className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full">
-          Add task
-        </Button>
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="mr-2 h-6 w-6  from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" />
+            <p>Task Master</p>
+          </div>
+          <Button className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-32">
+            <Plus className="mr-2 h-4 w-4" />
+            Add task
+          </Button>
+        </div>
       </SheetTrigger>
 
       {/* Sheet sliding from the top */}
@@ -153,8 +172,7 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
               <SheetDescription>
                 {editingTask
                   ? 'Update your task details.'
-                  : 'Create a quick task for your board. Tasks will live for 8 hours.'
-                }
+                  : 'Create a quick task for your board. Tasks will live for 8 hours.'}
               </SheetDescription>
             </SheetHeader>
 
@@ -221,4 +239,3 @@ const TaskForm = forwardRef<TaskFormRef>((props, ref) => {
 TaskForm.displayName = 'TaskForm';
 
 export default TaskForm;
- 

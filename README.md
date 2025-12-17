@@ -11,6 +11,7 @@ After 8 hours, your data is automatically cleaned up, giving you a fresh slate f
 ## Features
 
 ### Core Features
+
 - ✅ **Kanban-style board** with smooth drag-and-drop between columns
 - ✅ **Full CRUD operations** - Create, read, update, and delete tasks
 - ✅ **Automatic cleanup** with **8-hour TTL** (time to live)
@@ -20,6 +21,7 @@ After 8 hours, your data is automatically cleaned up, giving you a fresh slate f
 - ✅ Built on **Next.js App Router**
 
 ### Advanced Features
+
 - ✅ **Subtask management** with status-based checkbox controls
 - ✅ **Time scheduling** with start/end times and overlap validation
 - ✅ **Performance optimized** with React.memo and useCallback
@@ -90,21 +92,25 @@ Core libraries used in this implementation:
 ## Key Components
 
 ### TaskBoard
+
 - **Purpose**: Main Kanban board orchestrating drag-and-drop functionality
 - **Features**: useMemo for filtered tasks, useCallback for stable handlers
 - **Performance**: Optimized with React.memo child components
 
 ### TaskCard
+
 - **Purpose**: Individual task display with editing capabilities
 - **Features**: Subtask management, drag handle, edit/delete actions
 - **Performance**: React.memo with useCallback event handlers
 
 ### SubTaskList
+
 - **Purpose**: Manages subtasks with different modes (view/edit)
 - **Features**: Status-based checkbox controls, CRUD operations
 - **Modes**: Read-only (cards) vs. editable (forms)
 
 ### TaskForm
+
 - **Purpose**: Create and edit tasks with full validation
 - **Features**: Subtask management, time scheduling, overlap detection
 - **Validation**: Time conflict prevention, required field checks
